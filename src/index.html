@@ -11,9 +11,39 @@
 <script src="../jspm_packages/system.js"></script>
 <script src="../config.js"></script>
 <script>
-  System.import('reflect-metadata').then(function() {
-    return System.import('app/index').catch(console.log.bind(console));
-  });
+  Promise.all([
+    System.import('reflect-metadata'),
+    System.import('angular2/src/dom/browser_adapter')
+  ])
+  .catch(function(err) {
+    debugger;
+    throw err
+  })
+  .then(function(modules) {
+    debugger;
+    var BrowserDomAdapter = modules[1].BrowserDomAdapter;
+    BrowserDomAdapter.makeCurrent();
+    return modules;
+  })
+  .catch(function(err) {
+    debugger;
+    throw err
+  })
+  .then(function() {
+    return System.import('app/index')
+    .catch(function(err) {
+      debugger;
+      throw err
+    })
+    .then(function(module) {
+      return module.main();
+    });
+  })
+  .catch(function(err) {
+    debugger;
+    throw err
+  })
+  .catch(console.log.bind(console));
 </script>
 </body>
 </html>
